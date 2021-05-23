@@ -21,6 +21,8 @@ class DependencyManager():
         if self._controller.dev_mode:
             self.reloader = ModuleReloader()
 
+
+
     log = property(lambda self:
                    logging.getLogger("castervoice.DependencyManager"),
                    doc="TODO")
@@ -77,6 +79,40 @@ class ModuleReloader(importlib.abc.MetaPathFinder):
 
         get_current_engine().create_timer(self.reload, 10)
 
+        self.names = []
+
+        class DummyPathHook(importlib.abc.PathEntryFinder):
+
+            def __init__(self, path):
+                print('#### ---- PATH ----- ###:')
+                print(path)
+                raise ImportError
+
+            #def find_spec(self, unused_fullname, target=None):
+            #    print('###################   ---- AAAABCCCCCC  AAAA _-#####')
+            #    print(unused_fullname)
+            #    print(target)
+            #    return None
+
+            #def load_module(self, fullname):
+            #    return None
+
+        class DummyMetaHook(importlib.abc.MetaPathFinder):
+
+            #def __init__(self, path):
+            #    print('#### ---- META ----- ###:')
+            #    print(path)
+
+            def find_spec(self, fullname, path, target=None):
+                print('dfasdfasldfj###################   ---- XXXXXYYYYY  XXX _-#####')
+                print(fullname)
+                print(path)
+                print(target)
+                return None
+
+        #sys.path_hooks.insert(0, DummyPathHook)
+        #sys.meta_path.insert(0, DummyMetaHook)
+
     log = property(lambda self:
                    logging.getLogger("castervoice.ModuleReloader"),
                    doc="TODO")
@@ -97,8 +133,29 @@ class ModuleReloader(importlib.abc.MetaPathFinder):
         # Perform the actual import work using the base import function.
         base = self._baseimport(name, globals, locals, fromlist, level)
 
+        #print(name)
+
+        if base:
+            if name not in self.names:
+                self.names.append(name)
+                #print('#######################timoses####')
+                #print('name')
+                #print(name)
+                #print(parent)
+                #print('##################')
+                #print('##################')
+                #print('##################')
+
         if base is not None:
             m = base
+            #if hasattr(m, '__file__'):
+                #print(m.__file__)
+                #print('module####')
+                #print(m)
+                #print('name####')
+                #print(name)
+                #print('parent####')
+                #print(parent)
 
             # We manually walk through the imported hierarchy because the
             # import function only returns the top-level package reference for
@@ -151,6 +208,9 @@ class ModuleReloader(importlib.abc.MetaPathFinder):
             # It is a package
             if not hasattr(m, '__file__'):
                 continue
+            #print(m.__file__)
+            #print(os.path.getmtime(m.__file__))
+            #print(info['last_changed'])
 
             if 'last_changed' not in info:
                 self.set_changed_time(name)
