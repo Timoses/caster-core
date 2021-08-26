@@ -1,4 +1,5 @@
 import builtins
+import copy
 import importlib
 import logging
 import os
@@ -114,16 +115,17 @@ class ModuleReloader(importlib.abc.MetaPathFinder):
                     except AttributeError:
                         m = sys.modules[m.__name__ + '.' + component]
 
-            module = self._modules.setdefault(name, dict())
-            module["module"] = m
+            if hasattr(m, '__file__') and m.__file__:
+                module = self._modules.setdefault(name, dict())
+                module["module"] = m
 
-            if parent is not None:
-                parent_module = self._modules.setdefault(parent, dict())
-                # If this is a nested import for a reloadable (source-based)
-                # module, we append ourself to our parent's dependency list.
-                if hasattr(m, '__file__'):
-                    deps = parent_module.setdefault("dependencies", [])
-                    deps.append(m)
+                if parent is not None:
+                    parent_module = self._modules.setdefault(parent, dict())
+                    # If this is a nested import for a reloadable (source-based)
+                    # module, we append ourself to our parent's dependency list.
+                    if hasattr(m, '__file__'):
+                        deps = parent_module.setdefault("dependencies", [])
+                        deps.append(m)
 
         # Lastly, we always restore our global _parent pointer.
         self._parent = parent
@@ -141,7 +143,7 @@ class ModuleReloader(importlib.abc.MetaPathFinder):
 
         self.log.debug('Checking for changed modules to be reloaded')
 
-        for name, info in self._modules.items():
+        for name, info in copy.copy(self._modules).items():
 
             if 'module' not in info or not name:
                 continue
