@@ -37,7 +37,7 @@ class Plugin():
         if self._manager and self._manager.state_directory:
             self._state = PluginState(os.path
                                       .join(self._manager.state_directory,
-                                            "{self._id}.state"))
+                                            f"{self._id}.state"))
 
         self._init_context()
 
