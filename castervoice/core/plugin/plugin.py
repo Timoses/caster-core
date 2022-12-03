@@ -99,9 +99,9 @@ class Plugin():
         """Unload plugin's grammars."""
         if self._loaded:
             self.log.info("Unloading ...")
-            for grammar in self._grammars:
-                grammar.unload()
-                del grammar
+            while len(self._grammars) > 0:
+                _ = self._grammars.pop()
+                del _
 
             self._grammars = []
             self._loaded = False
@@ -125,7 +125,6 @@ class Plugin():
             grammar.disable()
 
     def get_grammars(self):
-        # pylint: disable=no-self-use
         """Gather plugins' grammars.
 
         :returns: List of `Grammar`
