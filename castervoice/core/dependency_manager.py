@@ -6,6 +6,7 @@ import site
 import subprocess
 import sys
 
+from importlib import abc
 from dragonfly import get_current_engine
 
 
@@ -55,7 +56,7 @@ class DependencyManager():
         self.reloader.watched_plugin_modules[plugin_id] = plugin_instance
 
 
-class ModuleReloader(importlib.abc.MetaPathFinder):
+class ModuleReloader(abc.MetaPathFinder):
     """
         Credits:
             Jon Parise: https://github.com/jparise/python-reloader
