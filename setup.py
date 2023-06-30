@@ -21,5 +21,7 @@ setuptools.setup(
     install_requires=[
         "PyYAML",
         "dragonfly2[kaldi]>=0.35.0",
+        "gevent",
+        "flask"
     ],
 )
