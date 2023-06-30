@@ -48,7 +48,7 @@ class Plugin():
                     doc="Plugin name.")
 
     log = property(lambda self:
-                   logging.getLogger("castervoice.Plugin({self._name})"),
+                   logging.getLogger(f"castervoice.Plugin({self._name})"),
                    doc="Get class logger.")
 
     def set_state(self, data):
@@ -187,8 +187,7 @@ class PluginFile:
             with open(file_path, "r", encoding="utf-8") as ymlfile:
                 self._data = yaml.load(ymlfile, Loader=Loader)
         except yaml.YAMLError as error:
-            print("Error in {self._type} file:")
-            print(error)
+            print(f"Error in {self._type} file: {error}")
         except FileNotFoundError:
             pass
 

@@ -113,7 +113,7 @@ class Controller:
 
             if not os.path.isdir(os.path.dirname(config_dir)):
                 raise FileNotFoundError("Configuration directory base path "
-                                        f"'{os.path.dirname(config_dir)}'"
+                                        f"'{os.path.dirname(config_dir)}' "
                                         "does not exist!")
 
             os.mkdir(config_dir)

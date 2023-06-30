@@ -47,9 +47,9 @@ def log():
     queue = new_queue()
     while True:
         reco = queue.get()
-        print("Recognized: %s" % " ".join(reco.words))
-        print("    Executing rule: %s" % (reco.rule))
-        print("    Action: %s" % (reco.node.value()))
+        print(f"Recognized: {' '.join(reco.words)}")
+        print(f"    Executing rule: {reco.rule}")
+        print(f"    Action: {reco.node.value()}")
 
 
 def stream_recognitions():
@@ -57,5 +57,5 @@ def stream_recognitions():
 
     while True:
         reco = queue.get()
-        s = "%s: %s" % (reco.plugin_name, " ".join(reco.words))
-        yield "data: %s\n\n" % s
+        s = f"{reco.plugin_name}: {' '.join(reco.words)}"
+        yield f"data: {s}\n\n"
